@@ -59,18 +59,18 @@ public class AuthService {
         Set<String> reqRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
         if (signUpRequest.getRole() == null) {
-            Role userRole = roleRepository.findByName("USER")
+            Role userRole = roleRepository.findByName("ROLE_USER")
                     .orElseThrow(() -> new RuntimeException(""));
             roles.add(userRole);
         } else {
             List<String> rolesList = reqRoles.stream().map(String::toUpperCase).collect(Collectors.toList());
             rolesList.forEach(role -> {
-                if ("ADMIN".equals(role)) {
-                    Role adminRole = roleRepository.findByName("ADMIN")
+                if ("ROLE_ADMIN".equals(role)) {
+                    Role adminRole = roleRepository.findByName("ROLE_ADMIN")
                             .orElseThrow(() -> new RuntimeException("ADMIN Role Not Found"));
                     roles.add(adminRole);
                 } else {
-                    Role userRole = roleRepository.findByName("USER")
+                    Role userRole = roleRepository.findByName("ROLE_USER")
                             .orElseThrow(() -> new RuntimeException("USER Role Not Found"));
                     roles.add(userRole);
                 }

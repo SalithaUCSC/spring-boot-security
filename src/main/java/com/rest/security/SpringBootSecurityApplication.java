@@ -23,8 +23,8 @@ public class SpringBootSecurityApplication {
 	public void addRoles() {
 		roleRepository.saveAll(
 			Arrays.asList(
-				Role.builder().name("ADMIN").build(),
-				Role.builder().name("USER").build()
+				Role.builder().name("ROLE_ADMIN").build(),
+				Role.builder().name("ROLE_USER").build()
 			)
 		);
 	}
