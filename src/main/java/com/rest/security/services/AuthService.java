@@ -5,6 +5,7 @@ import com.rest.security.dtos.JwtLoginRequest;
 import com.rest.security.dtos.JwtRegisterRequest;
 import com.rest.security.dtos.JwtResponse;
 import com.rest.security.entities.Role;
+import com.rest.security.entities.RoleType;
 import com.rest.security.entities.User;
 import com.rest.security.repositories.RoleRepository;
 import com.rest.security.repositories.UserRepository;
@@ -59,18 +60,18 @@ public class AuthService {
         Set<String> reqRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
         if (signUpRequest.getRole() == null) {
-            Role userRole = roleRepository.findByName("ROLE_USER")
-                    .orElseThrow(() -> new RuntimeException(""));
+            Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
+                    .orElseThrow(() -> new RuntimeException("USER Role Not Found"));
             roles.add(userRole);
         } else {
             List<String> rolesList = reqRoles.stream().map(String::toUpperCase).collect(Collectors.toList());
             rolesList.forEach(role -> {
-                if ("ROLE_ADMIN".equals(role)) {
-                    Role adminRole = roleRepository.findByName("ROLE_ADMIN")
+                if (RoleType.ROLE_ADMIN.toString().equals(role)) {
+                    Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN)
                             .orElseThrow(() -> new RuntimeException("ADMIN Role Not Found"));
                     roles.add(adminRole);
                 } else {
-                    Role userRole = roleRepository.findByName("ROLE_USER")
+                    Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
                             .orElseThrow(() -> new RuntimeException("USER Role Not Found"));
                     roles.add(userRole);
                 }
