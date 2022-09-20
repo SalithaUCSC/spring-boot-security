@@ -39,7 +39,7 @@ public class JwtProvider {
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parserBuilder().setSigningKey(jwtSecret.getBytes(StandardCharsets.UTF_8)).build()
+            Jwts.parserBuilder().setSigningKey(getSigningKey()).build()
                     .parseClaimsJws(authToken);
             return true;
         } catch (MalformedJwtException e) {
@@ -57,7 +57,7 @@ public class JwtProvider {
 
     public String getUserNameFromJwtToken(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(jwtSecret.getBytes(StandardCharsets.UTF_8)).build()
+                .setSigningKey(getSigningKey()).build()
                 .parseClaimsJws(token)
                 .getBody().getSubject();
     }

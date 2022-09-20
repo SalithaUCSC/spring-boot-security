@@ -1,6 +1,7 @@
 package com.rest.security;
 
 import com.rest.security.entities.Role;
+import com.rest.security.entities.RoleType;
 import com.rest.security.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -23,8 +24,8 @@ public class SpringBootSecurityApplication {
 	public void addRoles() {
 		roleRepository.saveAll(
 			Arrays.asList(
-				Role.builder().name("ADMIN").build(),
-				Role.builder().name("USER").build()
+				Role.builder().name(RoleType.valueOf("ROLE_ADMIN")).build(),
+				Role.builder().name(RoleType.valueOf("ROLE_USER")).build()
 			)
 		);
 	}
