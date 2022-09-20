@@ -56,15 +56,15 @@ public class AuthService {
     private User registerUser(JwtRegisterRequest signUpRequest) {
         User user = new User(signUpRequest.getName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
-        List<String> reqRoles = signUpRequest.getRole().stream()
-                .map(String::toUpperCase).collect(Collectors.toList());
+        Set<String> reqRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
         if (signUpRequest.getRole() == null) {
             Role userRole = roleRepository.findByName("USER")
                     .orElseThrow(() -> new RuntimeException(""));
             roles.add(userRole);
         } else {
-            reqRoles.forEach(role -> {
+            List<String> rolesList = reqRoles.stream().map(String::toUpperCase).collect(Collectors.toList());
+            rolesList.forEach(role -> {
                 if ("ADMIN".equals(role)) {
                     Role adminRole = roleRepository.findByName("ADMIN")
                             .orElseThrow(() -> new RuntimeException("ADMIN Role Not Found"));
