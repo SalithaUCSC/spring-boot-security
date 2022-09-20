@@ -2,15 +2,18 @@ package com.rest.security.configs.jwt;
 
 
 import com.rest.security.services.UserPrinciple;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
@@ -18,7 +21,9 @@ import java.util.Date;
 public class JwtProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
-    private final String jwtSecret = "thisismypasswordwithmorethan512bitsofstringlengththisismypasswordwithmorethan512bitsofstringlength";
+
+    @Value("${application.jwt.secret}")
+    String jwtSecret;
 
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(this.jwtSecret);
@@ -26,9 +31,7 @@ public class JwtProvider {
     }
 
     public String generateJwtToken(Authentication authentication) {
-
         UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
-
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
                 .setIssuedAt(new Date())
@@ -51,7 +54,6 @@ public class JwtProvider {
         } catch (IllegalArgumentException e) {
             logger.error("JWT claims string is empty -> Message: {}", e.getMessage());
         }
-
         return false;
     }
 
