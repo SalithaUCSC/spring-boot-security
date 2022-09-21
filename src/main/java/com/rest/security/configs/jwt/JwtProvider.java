@@ -25,6 +25,9 @@ public class JwtProvider {
     @Value("${application.jwt.secret}")
     String jwtSecret;
 
+    @Value("${application.jwt.expiration}")
+    Long jwtExpirationTime;
+
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(this.jwtSecret);
         return Keys.hmacShaKeyFor(keyBytes);
@@ -35,7 +38,7 @@ public class JwtProvider {
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + 60 * 1000L))
+                .setExpiration(new Date((new Date()).getTime() + jwtExpirationTime))
                 .signWith(getSigningKey())
                 .compact();
     }
